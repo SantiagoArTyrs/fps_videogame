@@ -8,6 +8,9 @@ TagManager:
   - Wall
   - Weapon
   - Skeleton
+  - Enemy
+  - Waypoints
+  - SwordSkeleton
   layers:
   - Default
   - TransparentFX

@@ -65,7 +65,10 @@ public class Throwable : MonoBehaviour
             {
                 rb.AddExplosionForce(explosionForce, transform.position, damageRadius);
             }
-            //Also apply damage to objects with health script
+            if (objectInRange.gameObject.GetComponent<Enemy>())
+            {
+                objectInRange.gameObject.GetComponent<Enemy>().TakeDamage(100);
+            }
         }
     }
 }
