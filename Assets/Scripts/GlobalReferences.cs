@@ -4,13 +4,15 @@ using System.Collections.Generic;
 
 public class GlobalReferences : MonoBehaviour
 {
-    public static GlobalReferences Instance {get; set;}
+    public static GlobalReferences Instance { get; set; }
 
     public GameObject bulletImpactEffectPrefab;
+    public GameObject grenadeExplosionEffect;
 
+    
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }

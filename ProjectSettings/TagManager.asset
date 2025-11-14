@@ -7,6 +7,7 @@ TagManager:
   - Target
   - Wall
   - Weapon
+  - Skeleton
   layers:
   - Default
   - TransparentFX

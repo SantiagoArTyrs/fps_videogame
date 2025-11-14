@@ -4,19 +4,28 @@ using System.Collections.Generic;
 
 public class Bullet : MonoBehaviour
 {
+    public int bulletDamage;
     private void OnCollisionEnter(Collision objectWeHit)
     {
         if (objectWeHit.gameObject.CompareTag("Target"))
         {
             print("hit " + objectWeHit.gameObject.name + "!");
             CreateBulletImpactEffect(objectWeHit);
-            Destroy(gameObject);
+
         }
         if (objectWeHit.gameObject.CompareTag("Wall"))
         {
             print("hit a wall ");
             CreateBulletImpactEffect(objectWeHit);
+
+
+        }
+        if (objectWeHit.gameObject.CompareTag("Skeleton"))
+        {
+            objectWeHit.gameObject.GetComponent<Skeleton>().TakeDamage(bulletDamage);
             Destroy(gameObject);
+
+
         }
     }
     void CreateBulletImpactEffect(Collision objectWeHit)

@@ -9,6 +9,10 @@ public class InteractionManager : MonoBehaviour
     public Weapon hovered;
 
     public Weapon hoveredWeapon = null;
+
+    public AmmoBox hoveredAmmoBox = null;
+
+    public Throwable hoveredThrowable = null;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,6 +48,46 @@ public class InteractionManager : MonoBehaviour
                 if (hoveredWeapon)
                 {
                     hoveredWeapon.GetComponent<Outline>().enabled = false;
+                }
+            }
+
+            //Ammo Box Interaction
+
+            if (objectHitByRaycast.GetComponent<AmmoBox>())
+            {
+                hoveredAmmoBox = objectHitByRaycast.gameObject.GetComponent<AmmoBox>();
+                hoveredAmmoBox.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    WeaponManager.Instance.PickupAmmo(hoveredAmmoBox);
+                    Destroy(objectHitByRaycast.gameObject);
+                }
+            }
+            else
+            {
+                if (hoveredAmmoBox)
+                {
+                    hoveredAmmoBox.GetComponent<Outline>().enabled = false;
+                }
+            }
+            //Nade Interaction
+
+            if (objectHitByRaycast.GetComponent<Throwable>())
+            {
+                hoveredThrowable = objectHitByRaycast.gameObject.GetComponent<Throwable>();
+                hoveredThrowable.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    WeaponManager.Instance.PickupThrowable(hoveredThrowable);
+                }
+            }
+            else
+            {
+                if (hoveredThrowable)
+                {
+                    hoveredThrowable.GetComponent<Outline>().enabled = false;
                 }
             }
         }

@@ -8,19 +8,25 @@ using TMPro;
 public class Weapon : MonoBehaviour
 {
     public bool isActiveWeapon;
+    public int weaponDamage;
 
+
+    [Header("Shooting")]
     public bool isShooting, readyToShoot;
     bool allowReset = true;
     public float shootingDelay = 2f;
-
+    [Header("Burst")]
     //Burst
-    public int bulletPerBurst = 3;
+    public int bulletsPerBurst = 3;
     public int burstBulletsLeft;
-
+    [Header("Spread")]
     //Spread
     public float spreadIntensity;
 
-    //Bullet
+    public float hipSpreadIntensity;
+    public float adsSpreadIntensity;
+
+    [Header("Bullet")]
 
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -29,7 +35,7 @@ public class Weapon : MonoBehaviour
 
     internal Animator animator;
 
-    //Reload
+    [Header("Reloading")]
 
     public float reloadTime;
     public int magazineSize, bulletsLeft;
@@ -37,6 +43,8 @@ public class Weapon : MonoBehaviour
 
     public Vector3 spawnPosition;
     public Vector3 spawnRotation;
+
+    public bool isADS;
 
 
     public enum WeaponModel
@@ -58,14 +66,27 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         readyToShoot = true;
-        burstBulletsLeft = bulletPerBurst;
+        burstBulletsLeft = bulletsPerBurst;
         animator = GetComponent<Animator>();
         bulletsLeft = magazineSize;
+        spreadIntensity = hipSpreadIntensity;
     }
     void Update()
     {
         if (isActiveWeapon)
         {
+            if (Input.GetMouseButtonDown(1))
+            {
+                EnterADS();
+
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                ExitADS();
+            }
+
+            GetComponent<Outline>().enabled = false;
+
             if (bulletsLeft == 0 && isShooting)
             {
                 SoundManager.Instance.emptyMagazineSoundCrossbow.Play();
@@ -82,7 +103,7 @@ public class Weapon : MonoBehaviour
                 isShooting = Input.GetKeyDown(KeyCode.Mouse0);
             }
 
-            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false)
+            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > 0)
             {
                 Reload();
             }
@@ -95,23 +116,42 @@ public class Weapon : MonoBehaviour
 
             if (readyToShoot && isShooting && bulletsLeft > 0)
             {
-                burstBulletsLeft = bulletPerBurst;
+                burstBulletsLeft = bulletsPerBurst;
                 FireWeapon();
             }
 
-            if (AmmoManager.Instance.ammoDisplay != null)
-            {
-                AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft / bulletPerBurst}/{magazineSize / bulletPerBurst}";
-            }
+
         }
 
+    }
+    private void EnterADS()
+    {
+        animator.SetTrigger("enterADS");
+        isADS = true;
+        HUDManager.Instance.middleDot.SetActive(false);
+        spreadIntensity = adsSpreadIntensity;
+    }
+    private void ExitADS()
+    {
+
+        animator.SetTrigger("exitADS");
+        isADS = false;
+        HUDManager.Instance.middleDot.SetActive(true);
+        spreadIntensity = hipSpreadIntensity;
     }
 
     private void FireWeapon()
     {
         bulletsLeft--;
-        animator.SetTrigger("RECOIL");
 
+        if (isADS)
+        {
+            animator.SetTrigger("RECOIL_ADS");
+        }
+        else
+        {
+            animator.SetTrigger("RECOIL");
+        }
 
         SoundManager.Instance.PlayShootingSound(thisWeaponModel);
 
@@ -122,6 +162,9 @@ public class Weapon : MonoBehaviour
 
         // Instantiate bullet and apply force
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+
+        Bullet bul = bullet.GetComponent<Bullet>();
+        bul.bulletDamage = weaponDamage;
 
         //Set bullet direction
         bullet.transform.forward = shootingDirection;
@@ -158,7 +201,16 @@ public class Weapon : MonoBehaviour
 
     private void ReloadCompleted()
     {
-        bulletsLeft = magazineSize;
+        if (WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > magazineSize)
+        {
+            bulletsLeft = magazineSize;
+            WeaponManager.Instance.DecreaseTotalAmmo(bulletsLeft, thisWeaponModel);
+        }
+        else
+        {
+            bulletsLeft = WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel);
+            WeaponManager.Instance.DecreaseTotalAmmo(bulletsLeft, thisWeaponModel);
+        }
         isReloading = false;
     }
     private void ResetShot()
@@ -182,10 +234,10 @@ public class Weapon : MonoBehaviour
         }
 
         Vector3 direction = targetPoint - bulletSpawn.position;
-        float x = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
+        float z = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
         float y = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
 
-        return direction + new Vector3(x, y, 0);
+        return direction + new Vector3(0, y, z);
     }
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float delay)

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2923593774064104799}
   - component: {fileID: 7608519839341815975}
   - component: {fileID: 5754735239770763548}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: double_barreled_gun1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3717209330272883919}
   - component: {fileID: 3592664495651820685}
   - component: {fileID: 8545936107187075372}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: double_barreled_gun2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 2528912841144709299}
   - component: {fileID: 4840342887919545914}
   - component: {fileID: 9111155878647020458}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,22 +243,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActiveWeapon: 0
+  weaponDamage: 25
   isShooting: 0
   readyToShoot: 0
   shootingDelay: 1
-  bulletPerBurst: 1
+  bulletsPerBurst: 1
   burstBulletsLeft: 0
   spreadIntensity: 0
-  bulletPrefab: {fileID: 3113905594809220997, guid: c45c4bd2be14b864d8fa2a143c9e332c, type: 3}
+  hipSpreadIntensity: 0.4
+  adsSpreadIntensity: 0.04
+  bulletPrefab: {fileID: 5825828560653532329, guid: e68356fbd38f68d409782d0d3d23b9c4, type: 3}
   bulletSpawn: {fileID: 4839430750901116595, guid: 1d5d38bf82f48314fa96241311f56a2e, type: 3}
   bulletVelocity: 700
-  bulletPrefabLifeTime: 3
+  bulletPrefabLifeTime: 10
   reloadTime: 2
   magazineSize: 1
   bulletsLeft: 0
   isReloading: 0
   spawnPosition: {x: 0, y: 0, z: 0}
   spawnRotation: {x: 0, y: 0, z: 0}
+  isADS: 0
   thisWeaponModel: 1
   currentShootingMode: 0
 --- !u!114 &9111155878647020458

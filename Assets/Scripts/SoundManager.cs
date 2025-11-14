@@ -8,10 +8,12 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource shootingSoundCrossbow;
     public AudioSource reloadingSoundCrossbow;
-
     public AudioSource shootingSoundShotgun;
     public AudioSource reloadingSoundShotgun;
     public AudioSource emptyMagazineSoundCrossbow;
+
+    public AudioSource throwablesChannel;
+    public AudioClip grenadeSound;
     private void Awake()
     {
         if (Instance != null && Instance != this)
