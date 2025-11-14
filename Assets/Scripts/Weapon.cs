@@ -35,6 +35,10 @@ public class Weapon : MonoBehaviour
     public int magazineSize, bulletsLeft;
     public bool isReloading;
 
+    public Vector3 spawnPosition;
+    public Vector3 spawnRotation;
+
+
     public enum WeaponModel
     {
         Crossbow,
@@ -105,7 +109,7 @@ public class Weapon : MonoBehaviour
         bulletsLeft--;
         animator.SetTrigger("RECOIL");
 
-        
+
         SoundManager.Instance.PlayShootingSound(thisWeaponModel);
 
         readyToShoot = false;
@@ -141,7 +145,7 @@ public class Weapon : MonoBehaviour
     private void Reload()
     {
 
-        
+
         SoundManager.Instance.PlayReloadingSound(thisWeaponModel);
 
         animator.SetTrigger("RELOAD");
