@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 public class InteractionManager : MonoBehaviour
 {
-    public static InteractionManager Instance { get; private set; }
+    public static InteractionManager Instance { get; set; }
+
+    public Weapon hovered;
+
+    public Weapon hoveredWeapon = null;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,9 +29,22 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject objectHitByRaycast = hit.transform.gameObject;
 
-            if (objectHitByRaycast.GetComponent<Weapon>())
+            if (objectHitByRaycast.GetComponent<Weapon>() && objectHitByRaycast.GetComponent<Weapon>().isActiveWeapon == false)
             {
-                print("Weapon Selected");
+                hoveredWeapon = objectHitByRaycast.gameObject.GetComponent<Weapon>();
+                hoveredWeapon.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    WeaponManager.Instance.PickupWeapon(objectHitByRaycast.gameObject);
+                }
+            }
+            else
+            {
+                if (hoveredWeapon)
+                {
+                    hoveredWeapon.GetComponent<Outline>().enabled = false;
+                }
             }
         }
 

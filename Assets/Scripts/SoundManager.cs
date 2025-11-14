@@ -1,5 +1,7 @@
 using UnityEngine;
 using static Weapon;
+using System.Collections;
+using System.Collections.Generic;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; set; }
