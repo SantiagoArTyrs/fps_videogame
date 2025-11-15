@@ -12,8 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     Vector3 velocity;
-    bool isGrounded;
-    bool isMoving;
+    public bool isGrounded;
+    public bool isMoving;
 
     private Vector3 lastPosition = new Vector3(0f, 0f, 0f);
     void Start()

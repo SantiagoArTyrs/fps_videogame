@@ -23,10 +23,10 @@ public class Bullet : MonoBehaviour
         if (objectWeHit.gameObject.CompareTag("Enemy"))
         {
             objectWeHit.gameObject.GetComponent<Enemy>().TakeDamage(bulletDamage);
-            Destroy(gameObject);
+            //Destroy(gameObject)[]
 
 
-        }
+       }
     }
     void CreateBulletImpactEffect(Collision objectWeHit)
     {
