@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private int HP = 100;
     private Animator animator;
     private NavMeshAgent navAgent;
+
+    public bool isDead;
+
 
 
     private void Start()
@@ -18,7 +23,7 @@ public class Enemy : MonoBehaviour
         HP -= damageAmount;
         if (HP <= 0)
         {
-            int randomValue = Random.Range(0,2); // 0 OR 1
+            int randomValue = Random.Range(0, 2); // 0 OR 1
 
             if (randomValue == 0)
             {
@@ -28,11 +33,14 @@ public class Enemy : MonoBehaviour
             {
                 animator.SetTrigger("DIE2");
             }
-            
+            isDead = true;
+            SoundManager.Instance.skeletonChannel.PlayOneShot(SoundManager.Instance.skeletonDeath);
+
         }
         else
         {
             animator.SetTrigger("DAMAGE");
+            SoundManager.Instance.skeletonChannel.PlayOneShot(SoundManager.Instance.skeletonHurt);
         }
     }
 
@@ -44,6 +52,6 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, 18f);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 21f);
-        
+
     }
 }

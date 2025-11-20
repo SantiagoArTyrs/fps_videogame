@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Collections;
+
 
 
 public class SkeletonPatrolingState : StateMachineBehaviour
@@ -11,20 +13,20 @@ public class SkeletonPatrolingState : StateMachineBehaviour
     NavMeshAgent agent;
     public float detectionArea = 18f;
     public float patrolSpeed = 2f;
-    List<Transform> waypointsList =  new List<Transform>();
+    List<Transform> waypointsList = new List<Transform>();
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       // --- Initalization --- //
+        // --- Initalization --- //
 
-       player = GameObject.FindGameObjectWithTag("Player").transform;
-       agent = animator.GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        agent = animator.GetComponent<NavMeshAgent>();
 
-       agent.speed = patrolSpeed;
-       timer = 0;
+        agent.speed = patrolSpeed;
+        timer = 0;
 
-       // Get all waypoints and Move to First Waypoint --- //
-       GameObject waypointCluster = GameObject.FindGameObjectWithTag("Waypoints");
-        foreach(Transform t in waypointCluster.transform)
+        // Get all waypoints and Move to First Waypoint --- //
+        GameObject waypointCluster = GameObject.FindGameObjectWithTag("Waypoints");
+        foreach (Transform t in waypointCluster.transform)
         {
             waypointsList.Add(t);
         }
@@ -32,11 +34,18 @@ public class SkeletonPatrolingState : StateMachineBehaviour
         agent.SetDestination(nextPosition);
     }
 
-    
+
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       // --- If agent arrived at waypoint, move to next waypoint --- //
-       if (agent.remainingDistance <= agent.stoppingDistance)
+        if (SoundManager.Instance.skeletonChannel.isPlaying == false)
+        {
+            SoundManager.Instance.skeletonChannel.PlayOneShot(SoundManager.Instance.skeletonWalking);
+        }
+
+
+
+        // --- If agent arrived at waypoint, move to next waypoint --- //
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
             agent.SetDestination(waypointsList[Random.Range(0, waypointsList.Count)].position);
         }
@@ -56,10 +65,10 @@ public class SkeletonPatrolingState : StateMachineBehaviour
             animator.SetBool("isChasing", true);
         }
     }
-    
+
     override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-      //Stop the agent
-      agent.SetDestination(agent.transform.position);
+        //Stop the agent
+        agent.SetDestination(agent.transform.position);
     }
 }

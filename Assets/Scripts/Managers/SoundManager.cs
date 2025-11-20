@@ -14,6 +14,16 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource throwablesChannel;
     public AudioClip grenadeSound;
+    public AudioClip skeletonWalking;
+    public AudioClip skeletonAttack;
+    public AudioClip skeletonHurt;
+    public AudioClip skeletonDeath;
+    public AudioSource skeletonChannel;
+    public AudioSource playerChannel;
+    public AudioClip playerDeath;
+    public AudioClip playerHurt;
+
+    public AudioClip gameOverMusic;
     private void Awake()
     {
         if (Instance != null && Instance != this)
