@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class SkeletonSpawnerController : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class SkeletonSpawnerController : MonoBehaviour
 
     public GameObject skeletonPrefab;
 
+    public TextMeshProUGUI waveOverUI;
+    public TextMeshProUGUI cooldownCounterUI;
+    public TextMeshProUGUI currentWaveUI;
+
+
     private void Start()
     {
         currentSkeletonsPerWave = initialSkeletonsPerWave;
@@ -32,6 +38,7 @@ public class SkeletonSpawnerController : MonoBehaviour
     {
         currentSkeletonsAlive.Clear();
         currentWave++;
+        currentWaveUI.text = "Wave: " + currentWave.ToString();
 
         StartCoroutine(SpawnWave());
     }
@@ -86,15 +93,20 @@ public class SkeletonSpawnerController : MonoBehaviour
             cooldownCounter = waveCooldown;
         }
 
+        cooldownCounterUI.text = cooldownCounter.ToString("F0");
+
     }
 
     private IEnumerator WaveCooldown()
     {
         inCooldown = true;
+        waveOverUI.gameObject.SetActive(true);
+
 
         yield return new WaitForSeconds(waveCooldown);
 
         inCooldown = false;
+        waveOverUI.gameObject.SetActive(false);
 
         currentSkeletonsPerWave *= 1;
 
